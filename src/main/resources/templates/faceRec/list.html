@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta http-equiv="X-UA-Compatible" content="ie=edge"/>
+    <title>识别</title>
+    <link th:include="common/statics :: globalsource"/>
+</head>
+<body>
+<div class="page-right-container">
+    <div th:include="common/message::message_body"></div>
+    <div class="row">
+        <div class="iframe-content transition">
+            <div class="row">
+                <div class="portlet">
+                    <div class="portlet-title">
+                        <h4>识别</h4>
+                        <span class="glyphicon glyphicon-chevron-down float-right" data-toggle="collapse"
+                              data-target="#searchWrapper"></span>
+                    </div>
+                    <!--<div class="form-box">-->
+                    <!--<form th:action="@{/faceRec/upload.htm}" id="addForm" name="addForm" method="post" enctype="multipart/form-data">-->
+                    <div class="col-md-offset-3" style="margin-top: 10px">
+                        <div class="input-wrapper">
+                            <label class="form-label">上传图片(仅支持jpg)</label>
+                            <input id="fileUpload" name="fileUpload" hidden="hidden"/>
+                            <!--<input class="form-input" type="file" id="pic" name="fileUpload"/>-->
+                        </div>
+                    </div>
+                    <!--</form>-->
+                    <!--</div>-->
+                    <!--<button type="button" class="layui-btn" id="fileUpload">-->
+                    <!--<i class="layui-icon">&#xe67c;</i>上传图片-->
+                    <!--</button>-->
+                    <!--<form class="form-horizontal" role="form" id="addForm" name="addForm"-->
+                    <!--th:action="@{/manager/add.htm}"  method="post">-->
+                    <!--<h6>项目名称</h6>-->
+                    <!--<input class="text" type="text" id="projectname" name="projectname" />-->
+                    <!--</form>-->
+                    <div class="col-md-12">
+                        <div class="btn-wrapper">
+                            <a class="btn btn-success" onclick="check()">识别<i
+                            ></i></a>
+                            <!-- <a>没有disabled属性 -->
+                            <!--<button class="btn btn-primary" disabled="disabled" id="ttst">Button</button>-->
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+<script th:src="@{/plugins/layui/layui.js}"></script>
+
+<script th:inline="javascript">
+
+    layui.use('upload', function () {
+        var upload = layui.upload;
+
+        //执行实例
+        var uploadInst = upload.render({
+            elem: '#fileUpload' //绑定元素
+            , url: contextPath + '/faceRec/upload' //上传接口
+            , done: function (res) {
+                // bootbox.alert(res.message);
+                layer.msg(res.message);
+                //上传完毕回调
+            }
+            , error: function () {
+                bootbox.alert("上传失败！");
+                //请求异常回调
+            }
+        });
+    });
+    function check() {
+        $.ajax({
+            url: contextPath + '/faceRec/check.json',
+            type: 'POST',
+            success: function (response) {
+                if (response != null && response != "") {
+                    // alert(response.message);
+                    layer.alert(response.message);
+
+                } else {
+                    // bootbox.alert("识别失败！");
+                    layer.msg("识别失败！");
+                }
+            }
+        });
+    }
+</script>
+</html>
